@@ -16,6 +16,7 @@ from typing import Literal
 from llm_guard_svc.config import Settings
 from llm_guard_svc.scanners.ban_substrings import BanSubstringsScanner
 from llm_guard_svc.scanners.base import Scanner
+from llm_guard_svc.scanners.secrets import SecretsScanner
 
 
 @dataclass(frozen=True)
@@ -30,6 +31,7 @@ class Registry:
 def build_registry(settings: Settings) -> Registry:
     builders: dict[str, Callable[[], Scanner]] = {
         "ban_substrings": lambda: BanSubstringsScanner(pii_types_path=settings.pii_types_path),
+        "secrets": lambda: SecretsScanner(pii_types_path=settings.pii_types_path),
     }
 
     inbound: list[Scanner] = []
