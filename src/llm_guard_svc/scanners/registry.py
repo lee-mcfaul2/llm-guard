@@ -15,9 +15,11 @@ from typing import Literal
 
 from llm_guard_svc.config import Settings
 from llm_guard_svc.scanners.ban_substrings import BanSubstringsScanner
+from llm_guard_svc.scanners.ban_topics import BanTopicsScanner
 from llm_guard_svc.scanners.base import Scanner
 from llm_guard_svc.scanners.prompt_injection import PromptInjectionScanner
 from llm_guard_svc.scanners.secrets import SecretsScanner
+from llm_guard_svc.scanners.toxicity import ToxicityScanner
 
 
 @dataclass(frozen=True)
@@ -34,6 +36,8 @@ def build_registry(settings: Settings) -> Registry:
         "ban_substrings": lambda: BanSubstringsScanner(pii_types_path=settings.pii_types_path),
         "secrets": lambda: SecretsScanner(pii_types_path=settings.pii_types_path),
         "prompt_injection": lambda: PromptInjectionScanner(),
+        "toxicity": lambda: ToxicityScanner(),
+        "ban_topics": lambda: BanTopicsScanner(topics=settings.ban_topics),
     }
 
     inbound: list[Scanner] = []
