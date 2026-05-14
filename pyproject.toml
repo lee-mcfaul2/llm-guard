@@ -1,0 +1,63 @@
+[project]
+name = "llm-guard-svc"
+version = "0.1.0"
+description = "LLM Guard sibling service for the AI Agent Security Platform"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.32",
+  "pydantic>=2.9",
+  "pydantic-settings>=2.6",
+  "prometheus-client>=0.21",
+  "structlog>=24.4",
+  "httpx>=0.27",
+  "llm-guard>=0.3.16",
+  "opentelemetry-api>=1.28",
+  "opentelemetry-sdk>=1.28",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3",
+  "pytest-asyncio>=0.24",
+  "pytest-cov>=6.0",
+  "respx>=0.21",
+  "ruff>=0.7",
+  "mypy>=1.13",
+  "bandit>=1.8",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/llm_guard_svc"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests/unit"]
+addopts = "-ra --strict-markers"
+asyncio_mode = "auto"
+markers = [
+  "integration: slow, loads real ML models",
+  "conformance: runs against published signed image",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "S", "UP", "SIM"]
+ignore = ["S101"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S105", "S106", "S311"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+
+[tool.bandit]
+exclude_dirs = ["tests"]
