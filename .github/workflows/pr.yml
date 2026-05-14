@@ -1,0 +1,54 @@
+name: pr
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: install uv
+        run: pip install uv
+      - name: install deps
+        run: uv sync --all-extras
+      - name: ruff
+        run: uv run ruff check src/ tests/
+      - name: mypy
+        run: uv run mypy src/
+      - name: bandit
+        run: uv run bandit -r src/ -q
+      - name: pytest unit
+        run: uv run pytest tests/unit/ -v
+
+  integration:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'run-integration')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install uv
+      - run: uv sync --all-extras
+      - run: uv run pytest tests/integration/ -m integration -v
+
+  helm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-helm@v4
+        with:
+          version: v3.14.0
+      - run: helm lint deploy/helm/
+
+  dockerfile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: deploy/Dockerfile
