@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import Literal
 
-from llm_guard_svc.scanners.base import ScanContext, ScanResult, Scanner, Span
+from llm_guard_svc.scanners.base import ScanContext, Scanner, ScanResult, Span
 from llm_guard_svc.shared.categories import load_categories
 
 
@@ -36,4 +36,4 @@ class SecretsScanner:
         return ScanResult(scanner=self.name, is_valid=False, risk_score=1.0, spans=spans)
 
 
-_: Scanner = SecretsScanner.__new__(SecretsScanner)  # type: ignore[assignment]
+_: Scanner = SecretsScanner.__new__(SecretsScanner)  # structural conformance check

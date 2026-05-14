@@ -10,7 +10,6 @@ import subprocess  # nosec B404 — required for cosign shell-out
 
 import pytest
 
-
 pytestmark = pytest.mark.conformance
 
 
@@ -29,8 +28,8 @@ def _skip_if_missing() -> None:
 
 def test_cosign_verify_image():
     _skip_if_missing()
-    result = subprocess.run(  # nosec B603, B607 — controlled cosign invocation
-        [
+    result = subprocess.run(  # nosec B603, B607 — controlled cosign invocation  # noqa: S603
+        [  # noqa: S607
             "cosign", "verify",
             "--certificate-identity", _IDENTITY,
             "--certificate-oidc-issuer", _OIDC_ISSUER,
@@ -45,8 +44,8 @@ def test_cosign_verify_image():
 
 def test_image_has_slsa_provenance():
     _skip_if_missing()
-    result = subprocess.run(  # nosec B603, B607
-        [
+    result = subprocess.run(  # nosec B603, B607  # noqa: S603
+        [  # noqa: S607
             "cosign", "verify-attestation",
             "--certificate-identity", _IDENTITY,
             "--certificate-oidc-issuer", _OIDC_ISSUER,

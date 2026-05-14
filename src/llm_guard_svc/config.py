@@ -6,7 +6,6 @@ from typing import Any
 from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, EnvSettingsSource, SettingsConfigDict
 
-
 _DEFAULT_INBOUND = ["prompt_injection", "secrets", "ban_substrings", "toxicity", "ban_topics"]
 _DEFAULT_OUTBOUND = ["secrets", "prompt_injection", "malicious_urls", "sensitive"]
 _DEFAULT_BAN_TOPICS = ["violence", "illegal_activity"]
@@ -59,7 +58,7 @@ class Settings(BaseSettings):
     pii_types_path: str = ""
 
     @classmethod
-    def settings_customise_sources(
+    def settings_customise_sources(  # type: ignore[override]
         cls,
         settings_cls: type[BaseSettings],
         **kwargs: Any,
@@ -72,13 +71,13 @@ class Settings(BaseSettings):
         return _split_csv(v)
 
     @model_validator(mode="after")
-    def _check_backstop_paths(self) -> "Settings":
+    def _check_backstop_paths(self) -> Settings:
         needs_backstop = "ban_substrings" in self.inbound_scanners or (
             "secrets" in self.inbound_scanners or "secrets" in self.outbound_scanners
         )
         if needs_backstop and not self.pii_types_path:
             raise ValueError(
-                "LLM_GUARD_PII_TYPES_PATH must be set when ban_substrings or secrets scanners are enabled. "
-                "Mount lib-agent-prompt's shared pii-types.json and set the path."
+                "LLM_GUARD_PII_TYPES_PATH must be set when ban_substrings or secrets scanners "
+                "are enabled. Mount lib-agent-prompt's shared pii-types.json and set the path."
             )
         return self

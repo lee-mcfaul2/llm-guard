@@ -6,7 +6,7 @@ import pytest
 def test_defaults(monkeypatch):
     monkeypatch.delenv("LLM_GUARD_INBOUND_SCANNERS", raising=False)
     monkeypatch.delenv("LLM_GUARD_OUTBOUND_SCANNERS", raising=False)
-    monkeypatch.setenv("LLM_GUARD_PII_TYPES_PATH", "/tmp/pii.json")
+    monkeypatch.setenv("LLM_GUARD_PII_TYPES_PATH", "/tmp/pii.json")  # noqa: S108
     from llm_guard_svc.config import Settings
     s = Settings()
     assert s.port == 8080
@@ -17,7 +17,7 @@ def test_defaults(monkeypatch):
 
 def test_csv_parsed_into_list(monkeypatch):
     monkeypatch.setenv("LLM_GUARD_INBOUND_SCANNERS", "prompt_injection,secrets")
-    monkeypatch.setenv("LLM_GUARD_PII_TYPES_PATH", "/tmp/pii.json")
+    monkeypatch.setenv("LLM_GUARD_PII_TYPES_PATH", "/tmp/pii.json")  # noqa: S108
     from llm_guard_svc.config import Settings
     s = Settings()
     assert s.inbound_scanners == ["prompt_injection", "secrets"]
@@ -25,7 +25,7 @@ def test_csv_parsed_into_list(monkeypatch):
 
 def test_thresholds_override(monkeypatch):
     monkeypatch.setenv("LLM_GUARD_PROMPT_INJECTION_BLOCK_THRESHOLD", "0.9")
-    monkeypatch.setenv("LLM_GUARD_PII_TYPES_PATH", "/tmp/pii.json")
+    monkeypatch.setenv("LLM_GUARD_PII_TYPES_PATH", "/tmp/pii.json")  # noqa: S108
     from llm_guard_svc.config import Settings
     s = Settings()
     assert s.prompt_injection_block_threshold == pytest.approx(0.9)
@@ -33,7 +33,7 @@ def test_thresholds_override(monkeypatch):
 
 def test_ban_topics_csv(monkeypatch):
     monkeypatch.setenv("LLM_GUARD_BAN_TOPICS", "violence,illegal_activity,self_harm")
-    monkeypatch.setenv("LLM_GUARD_PII_TYPES_PATH", "/tmp/pii.json")
+    monkeypatch.setenv("LLM_GUARD_PII_TYPES_PATH", "/tmp/pii.json")  # noqa: S108
     from llm_guard_svc.config import Settings
     s = Settings()
     assert s.ban_topics == ["violence", "illegal_activity", "self_harm"]

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Literal
 
-from llm_guard_svc.scanners.base import ScanContext, ScanResult, Scanner, Span
+from llm_guard_svc.scanners.base import ScanContext, Scanner, ScanResult, Span
 from llm_guard_svc.shared.categories import load_categories
 
 
@@ -34,4 +34,4 @@ class BanSubstringsScanner:
         return ScanResult(scanner=self.name, is_valid=False, risk_score=1.0, spans=spans)
 
 
-_: Scanner = BanSubstringsScanner.__new__(BanSubstringsScanner)  # type: ignore[assignment]
+_: Scanner = BanSubstringsScanner.__new__(BanSubstringsScanner)  # structural conformance check

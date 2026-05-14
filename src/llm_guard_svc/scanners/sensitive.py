@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Literal
+from typing import Any, Literal
 
-from llm_guard_svc.scanners.base import ScanContext, ScanResult, Scanner
+from llm_guard_svc.scanners.base import ScanContext, Scanner, ScanResult
 
 
-def _import_lib_class():
-    from llm_guard.output_scanners import Sensitive as _SensitiveLib
+def _import_lib_class() -> Any:
+    from llm_guard.output_scanners import Sensitive as _SensitiveLib  # type: ignore[import-untyped]
     return _SensitiveLib
 
 
@@ -26,4 +26,4 @@ class SensitiveScanner:
         return ScanResult(scanner=self.name, is_valid=bool(is_valid), risk_score=float(risk))
 
 
-_: Scanner = SensitiveScanner.__new__(SensitiveScanner)  # type: ignore[assignment]
+_: Scanner = SensitiveScanner.__new__(SensitiveScanner)  # structural conformance check

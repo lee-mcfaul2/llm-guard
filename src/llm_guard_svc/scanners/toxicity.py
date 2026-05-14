@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Literal
+from typing import Any, Literal
 
-from llm_guard_svc.scanners.base import ScanContext, ScanResult, Scanner
+from llm_guard_svc.scanners.base import ScanContext, Scanner, ScanResult
 
 
-def _import_lib_class():
-    from llm_guard.input_scanners import Toxicity as _ToxicityLib
+def _import_lib_class() -> Any:
+    from llm_guard.input_scanners import Toxicity as _ToxicityLib  # type: ignore[import-untyped]
     return _ToxicityLib
 
 
@@ -26,4 +26,4 @@ class ToxicityScanner:
         return ScanResult(scanner=self.name, is_valid=bool(is_valid), risk_score=float(risk))
 
 
-_: Scanner = ToxicityScanner.__new__(ToxicityScanner)  # type: ignore[assignment]
+_: Scanner = ToxicityScanner.__new__(ToxicityScanner)  # structural conformance check

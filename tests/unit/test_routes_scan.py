@@ -28,7 +28,9 @@ def _hit_scanner(name: str, score: float, spans: list[Span] | None = None):
 
 def _deps(inbound=None, outbound=None, thresholds=None):
     registry = MagicMock()
-    registry.for_direction = MagicMock(side_effect=lambda d: inbound if d == "inbound" else (outbound or []))
+    registry.for_direction = MagicMock(
+        side_effect=lambda d: inbound if d == "inbound" else (outbound or [])
+    )
     e = threading.Event()
     e.set()
     return Deps(registry=registry, thresholds=thresholds or {}, models_loaded_event=e)
@@ -55,7 +57,9 @@ def test_scan_allow_when_all_pass():
 
 def test_scan_block_returns_categories():
     deps = _deps(
-        inbound=[_hit_scanner("prompt_injection", 0.9, [Span("prompt_injection", 0, 5, "prompt_injection")])],
+        inbound=[_hit_scanner(
+            "prompt_injection", 0.9, [Span("prompt_injection", 0, 5, "prompt_injection")]
+        )],
         thresholds={"prompt_injection": 0.7},
     )
     client = _client(deps)
@@ -115,7 +119,10 @@ def test_scan_500_on_scanner_exception():
     assert r.status_code == 500
     body = r.json()
     # FastAPI wraps custom error responses; the detail dict has our error code
-    assert body.get("detail", {}).get("error") == "SCANNER_ERROR" or body.get("error") == "SCANNER_ERROR"
+    assert (
+        body.get("detail", {}).get("error") == "SCANNER_ERROR"
+        or body.get("error") == "SCANNER_ERROR"
+    )
 
 
 def test_scan_503_when_not_ready():

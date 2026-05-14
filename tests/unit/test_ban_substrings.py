@@ -7,7 +7,6 @@ import pytest
 from llm_guard_svc.scanners.ban_substrings import BanSubstringsScanner
 from llm_guard_svc.scanners.base import ScanContext
 
-
 FIXTURE = Path(__file__).parent.parent / "fixtures" / "pii-types.json"
 
 

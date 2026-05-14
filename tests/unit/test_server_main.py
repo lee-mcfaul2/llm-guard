@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-
 FIXTURE_PII = str(Path(__file__).parent.parent / "fixtures" / "pii-types.json")
 
 

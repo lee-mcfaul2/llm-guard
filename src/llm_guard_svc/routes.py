@@ -19,7 +19,7 @@ from llm_guard_svc.obs.metrics import (
     LLM_GUARD_SCANNER_HITS_TOTAL,
     render_text,
 )
-from llm_guard_svc.scanners.base import ScanContext, ScanResult
+from llm_guard_svc.scanners.base import ScanContext, Scanner, ScanResult
 from llm_guard_svc.scanners.registry import Registry
 from llm_guard_svc.verdict import aggregate
 
@@ -86,7 +86,7 @@ def make_router(deps: Deps) -> APIRouter:
         )
         request_start = time.monotonic()
 
-        async def _run_one(scanner) -> ScanResult:
+        async def _run_one(scanner: Scanner) -> ScanResult:
             t0 = time.monotonic()
             try:
                 result = await scanner.scan(req.text, ctx)
@@ -112,12 +112,12 @@ def make_router(deps: Deps) -> APIRouter:
             return result
 
         try:
-            results = await asyncio.gather(*(_run_one(s) for s in scanners))
+            results: list[ScanResult] = list(await asyncio.gather(*(_run_one(s) for s in scanners)))
         except Exception as exc:
             log.error("scan_failed", request_uuid=req.request_uuid, err=str(exc))
             raise HTTPException(status_code=500, detail={"error": "SCANNER_ERROR"}) from exc
 
-        action, categories, spans = aggregate(list(results), deps.thresholds)
+        action, categories, spans = aggregate(results, deps.thresholds)
 
         duration = time.monotonic() - request_start
         LLM_GUARD_REQUEST_DURATION_SECONDS.labels(direction=req.direction).observe(duration)

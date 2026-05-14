@@ -3,13 +3,13 @@ from __future__ import annotations
 
 def test_all_metrics_exist():
     from llm_guard_svc.obs.metrics import (
-        LLM_GUARD_REQUESTS_TOTAL,
-        LLM_GUARD_REQUEST_DURATION_SECONDS,
-        LLM_GUARD_SCANNER_DURATION_SECONDS,
-        LLM_GUARD_SCANNER_HITS_TOTAL,
-        LLM_GUARD_SCANNER_ERRORS_TOTAL,
-        LLM_GUARD_MODELS_LOADED,
         LLM_GUARD_MODEL_LOAD_DURATION_SECONDS,
+        LLM_GUARD_MODELS_LOADED,
+        LLM_GUARD_REQUEST_DURATION_SECONDS,
+        LLM_GUARD_REQUESTS_TOTAL,
+        LLM_GUARD_SCANNER_DURATION_SECONDS,
+        LLM_GUARD_SCANNER_ERRORS_TOTAL,
+        LLM_GUARD_SCANNER_HITS_TOTAL,
     )
 
     LLM_GUARD_REQUESTS_TOTAL.labels(direction="inbound", action="allow").inc()

@@ -7,7 +7,6 @@ import pytest
 from llm_guard_svc.config import Settings
 from llm_guard_svc.scanners.registry import build_registry
 
-
 FIXTURE_PII = str(Path(__file__).parent.parent / "fixtures" / "pii-types.json")
 
 

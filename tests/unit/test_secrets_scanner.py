@@ -7,7 +7,6 @@ import pytest
 from llm_guard_svc.scanners.base import ScanContext
 from llm_guard_svc.scanners.secrets import SecretsScanner
 
-
 FIXTURE = Path(__file__).parent.parent / "fixtures" / "pii-types.json"
 
 

@@ -4,8 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from llm_guard_svc.shared.categories import Category, load_categories
-
+from llm_guard_svc.shared.categories import load_categories
 
 FIXTURE = Path(__file__).parent.parent / "fixtures" / "pii-types.json"
 
@@ -33,4 +32,4 @@ def test_compile_regex():
 
 def test_missing_file_raises():
     with pytest.raises(FileNotFoundError):
-        load_categories(Path("/tmp/definitely-not-there.json"))
+        load_categories(Path("/tmp/definitely-not-there.json"))  # noqa: S108

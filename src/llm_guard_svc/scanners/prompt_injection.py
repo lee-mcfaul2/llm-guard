@@ -16,13 +16,15 @@ valid and the two scanner instances remain independently mockable.
 from __future__ import annotations
 
 import asyncio
-from typing import Literal
+from typing import Any, Literal
 
-from llm_guard_svc.scanners.base import ScanContext, ScanResult, Scanner
+from llm_guard_svc.scanners.base import ScanContext, Scanner, ScanResult
 
 
-def _import_lib_classes():
-    from llm_guard.input_scanners import PromptInjection as _InboundLib
+def _import_lib_classes() -> tuple[Any, Any]:
+    from llm_guard.input_scanners import (  # type: ignore[import-untyped]
+        PromptInjection as _InboundLib,
+    )
     # llm-guard 0.3.x has no output-side PromptInjection; use the same
     # input-scanner class for outbound — same model, same API.
     _OutboundLib = _InboundLib
@@ -56,4 +58,4 @@ class PromptInjectionScanner:
         )
 
 
-_: Scanner = PromptInjectionScanner.__new__(PromptInjectionScanner)  # type: ignore[assignment]
+_: Scanner = PromptInjectionScanner.__new__(PromptInjectionScanner)  # structural conformance check

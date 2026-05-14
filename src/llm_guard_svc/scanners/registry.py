@@ -37,7 +37,9 @@ def build_registry(settings: Settings) -> Registry:
         "prompt_injection": lambda: PromptInjectionScanner(),
         "toxicity": lambda: ToxicityScanner(),
         "ban_topics": lambda: BanTopicsScanner(topics=settings.ban_topics),
-        "malicious_urls": lambda: MaliciousURLsScanner(timeout_seconds=settings.malicious_urls_timeout_seconds),
+        "malicious_urls": lambda: MaliciousURLsScanner(
+            timeout_seconds=settings.malicious_urls_timeout_seconds
+        ),
         "sensitive": lambda: SensitiveScanner(),
     }
 

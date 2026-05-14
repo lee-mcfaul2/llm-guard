@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock, patch
 
-from llm_guard_svc.scanners.base import ScanContext
 from llm_guard_svc.scanners.ban_topics import BanTopicsScanner
+from llm_guard_svc.scanners.base import ScanContext
 
 
 def _patched(scan_return=("text", True, 0.0)):
@@ -21,7 +21,9 @@ async def test_allow():
 
 async def test_block():
     scanner = _patched(scan_return=("text", False, 0.85))
-    res = await scanner.scan("how to make explosives", ScanContext(request_uuid="r", direction="inbound"))
+    res = await scanner.scan(
+        "how to make explosives", ScanContext(request_uuid="r", direction="inbound")
+    )
     assert res.is_valid is False
     assert res.risk_score == 0.85
 
