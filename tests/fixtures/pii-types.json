@@ -1,0 +1,19 @@
+{
+  "categories": [
+    {
+      "name": "CODEWORD_PROJECT_BLUE",
+      "kind": "CODEWORD",
+      "regex": "PROJECT_BLUE_[A-Z0-9]+"
+    },
+    {
+      "name": "SECRET_AWS_ACCESS_KEY",
+      "kind": "SECRET",
+      "regex": "AKIA[0-9A-Z]{16}"
+    },
+    {
+      "name": "PII_EMAIL",
+      "kind": "PII",
+      "regex": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+"
+    }
+  ]
+}
