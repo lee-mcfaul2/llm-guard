@@ -1,0 +1,10 @@
+apiVersion: policy.linkerd.io/v1alpha1
+kind: MeshTLSAuthentication
+metadata:
+  name: agent-gateway-mtls
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "llm-guard.labels" . | nindent 4 }}
+spec:
+  identities:
+    - "spiffe://{{ .Values.linkerd.trustDomain }}/ns/{{ .Values.linkerd.gateway.namespace }}/sa/{{ .Values.linkerd.gateway.serviceAccount }}"
