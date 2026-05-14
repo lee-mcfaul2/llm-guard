@@ -3,9 +3,6 @@
 The registry is built once at process start. Scanners are stateless after init
 (ML ones load models in __init__; regex ones compile patterns in __init__).
 Within a request we call them concurrently via asyncio.gather.
-
-NOTE: subsequent tasks register prompt_injection, secrets, toxicity, ban_topics,
-malicious_urls, sensitive in the builders dict.
 """
 from __future__ import annotations
 
@@ -17,8 +14,10 @@ from llm_guard_svc.config import Settings
 from llm_guard_svc.scanners.ban_substrings import BanSubstringsScanner
 from llm_guard_svc.scanners.ban_topics import BanTopicsScanner
 from llm_guard_svc.scanners.base import Scanner
+from llm_guard_svc.scanners.malicious_urls import MaliciousURLsScanner
 from llm_guard_svc.scanners.prompt_injection import PromptInjectionScanner
 from llm_guard_svc.scanners.secrets import SecretsScanner
+from llm_guard_svc.scanners.sensitive import SensitiveScanner
 from llm_guard_svc.scanners.toxicity import ToxicityScanner
 
 
@@ -38,6 +37,8 @@ def build_registry(settings: Settings) -> Registry:
         "prompt_injection": lambda: PromptInjectionScanner(),
         "toxicity": lambda: ToxicityScanner(),
         "ban_topics": lambda: BanTopicsScanner(topics=settings.ban_topics),
+        "malicious_urls": lambda: MaliciousURLsScanner(timeout_seconds=settings.malicious_urls_timeout_seconds),
+        "sensitive": lambda: SensitiveScanner(),
     }
 
     inbound: list[Scanner] = []
