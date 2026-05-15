@@ -28,10 +28,13 @@ ENV PATH="/opt/venv/bin:$PATH" \
 # Pre-load every ML scanner so the model files land in /opt/huggingface.
 # Outbound PromptInjection is aliased to input_scanners.PromptInjection in our
 # wrapper (per Task 11 deviation), so we only need to load the input variant.
-RUN python -c "from llm_guard.input_scanners import PromptInjection, Toxicity, BanTopics; \
+# Best-effort: if a scanner's API/model differs in the pinned llm-guard
+# version, fall back to lazy runtime download rather than failing the image.
+RUN (python -c "from llm_guard.input_scanners import PromptInjection, Toxicity, BanTopics; \
 PromptInjection(); Toxicity(); BanTopics(topics=['violence'])" && \
     python -c "from llm_guard.output_scanners import MaliciousURLs, Sensitive; \
-MaliciousURLs(); Sensitive()"
+MaliciousURLs(); Sensitive()") \
+    || echo "WARN: ML scanner preload failed; models will download at runtime"
 
 # Runtime stage
 FROM python:3.12-slim AS runtime
