@@ -7,4 +7,4 @@ metadata:
     {{- include "llm-guard.labels" . | nindent 4 }}
 spec:
   identities:
-    - "spiffe://{{ .Values.linkerd.trustDomain }}/ns/{{ .Values.linkerd.gateway.namespace }}/sa/{{ .Values.linkerd.gateway.serviceAccount }}"
+    - "{{ .Values.linkerd.gateway.serviceAccount }}.{{ .Values.linkerd.gateway.namespace }}.serviceaccount.identity.linkerd.cluster.local"
