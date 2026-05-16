@@ -44,7 +44,11 @@ linkerd:
     serviceAccount: agent-gateway-sa
 
 service:
-  port: 8080
+  # Externally-reachable Service port. Set to 8000 to match the demo docs
+  # (docs/walkthrough.md + docs/troubleshooting.md curl llm-guard on :8000).
+  # The container still listens on 8080 (LLM_GUARD_PORT / containerPort:
+  # named "http"); Service port 8000 -> targetPort http(8080).
+  port: 8000
 
 prometheus:
   serviceMonitor:
