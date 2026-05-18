@@ -46,6 +46,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ENV PYTHONUNBUFFERED=1 \
     PATH="/opt/venv/bin:$PATH" \
+    PYTHONPATH=/app/src \
     HF_HOME=/opt/huggingface
 
 COPY --from=builder /opt/venv /opt/venv
