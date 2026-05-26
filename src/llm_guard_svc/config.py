@@ -57,6 +57,11 @@ class Settings(BaseSettings):
 
     pii_types_path: str = ""
 
+    # OTLP/HTTP trace endpoint. Empty → tracer provider installed but spans
+    # are discarded. Demo override points to Tempo at
+    # http://tempo.platform.svc.cluster.local:4318/v1/traces.
+    otlp_endpoint: str = ""
+
     @classmethod
     def settings_customise_sources(  # type: ignore[override]
         cls,

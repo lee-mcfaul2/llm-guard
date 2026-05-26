@@ -14,6 +14,8 @@ dependencies = [
   "llm-guard>=0.3.16",
   "opentelemetry-api>=1.28",
   "opentelemetry-sdk>=1.28",
+  "opentelemetry-exporter-otlp>=1.28",
+  "opentelemetry-instrumentation-fastapi>=0.49b0",
 ]
 
 [project.optional-dependencies]

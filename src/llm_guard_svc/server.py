@@ -14,6 +14,7 @@ from llm_guard_svc.obs.metrics import (
     LLM_GUARD_MODEL_LOAD_DURATION_SECONDS,
     LLM_GUARD_MODELS_LOADED,
 )
+from llm_guard_svc.obs.tracing import instrument_fastapi_app, setup_tracing
 from llm_guard_svc.routes import Deps, make_router
 from llm_guard_svc.scanners.registry import build_registry
 
@@ -80,6 +81,12 @@ def create_app() -> FastAPI:
         yield
         log.info("shutdown")
 
+    # OTel: install tracer provider + auto-instrument FastAPI so each /scan
+    # call appears as a span linked (via inbound traceparent) to the
+    # gateway's request that triggered it. No-op if otlp_endpoint is empty.
+    setup_tracing(settings.otlp_endpoint, "llm-guard")
+
     app = FastAPI(lifespan=_lifespan)
+    instrument_fastapi_app(app)
     app.include_router(make_router(deps))
     return app

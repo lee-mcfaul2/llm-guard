@@ -11,6 +11,7 @@ from fastapi import APIRouter, HTTPException, Response
 from pydantic import BaseModel, Field
 
 from llm_guard_svc.obs.logging import get_logger
+from llm_guard_svc.obs.tracing import set_attrs_on_current_span
 from llm_guard_svc.obs.metrics import (
     LLM_GUARD_REQUEST_DURATION_SECONDS,
     LLM_GUARD_REQUESTS_TOTAL,
@@ -76,6 +77,18 @@ def make_router(deps: Deps) -> APIRouter:
         if not deps.models_loaded_event.is_set():
             log.warning("scan_before_ready", request_uuid=req.request_uuid)
             raise HTTPException(status_code=503, detail={"error": "NOT_READY"})
+
+        # FastAPI auto-instr already created a span for this request; attach
+        # the prompt-lifecycle keys so a Tempo search by request_uuid finds
+        # the llm-guard work for that prompt.
+        set_attrs_on_current_span(
+            **{
+                "request_uuid": req.request_uuid,
+                "llm_guard.direction": req.direction,
+                "llm_guard.mcp": req.mcp,
+                "llm_guard.tool": req.tool,
+            }
+        )
 
         scanners = deps.registry.for_direction(req.direction)
         ctx = ScanContext(
