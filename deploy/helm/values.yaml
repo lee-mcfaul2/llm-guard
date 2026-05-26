@@ -20,10 +20,15 @@ config:
   inbound_scanners: "prompt_injection,secrets,ban_substrings,toxicity,ban_topics"
   outbound_scanners: "secrets,prompt_injection,malicious_urls,sensitive"
   ban_topics: "violence,illegal_activity"
-  prompt_injection_block_threshold: "0.7"
+  # 0.9 default: the OSS prompt-injection classifier scores broad benign
+  # queries in the 0.7-0.85 band; real attacks score >0.95. Operators with
+  # higher recall requirements can lower this via Helm override.
+  prompt_injection_block_threshold: "0.9"
   secrets_block_threshold: "1.0"
   toxicity_block_threshold: "0.8"
-  ban_topics_block_threshold: "0.7"
+  # 0.9 default: ban_topics is semantic-similarity; same FP profile as
+  # prompt_injection on benign workloads. Operators tune via Helm override.
+  ban_topics_block_threshold: "0.9"
   malicious_urls_block_threshold: "0.9"
   sensitive_block_threshold: "0.6"
   malicious_urls_timeout_seconds: "0.5"

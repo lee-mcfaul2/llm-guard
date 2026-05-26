@@ -44,10 +44,10 @@ class Settings(BaseSettings):
     inbound_scanners: list[str] = Field(default_factory=lambda: list(_DEFAULT_INBOUND))
     outbound_scanners: list[str] = Field(default_factory=lambda: list(_DEFAULT_OUTBOUND))
 
-    prompt_injection_block_threshold: float = 0.7
+    prompt_injection_block_threshold: float = 0.9
     secrets_block_threshold: float = 1.0
     toxicity_block_threshold: float = 0.8
-    ban_topics_block_threshold: float = 0.7
+    ban_topics_block_threshold: float = 0.9
     malicious_urls_block_threshold: float = 0.9
     sensitive_block_threshold: float = 0.6
 

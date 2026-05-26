@@ -12,7 +12,7 @@ def test_defaults(monkeypatch):
     assert s.port == 8080
     assert "prompt_injection" in s.inbound_scanners
     assert "secrets" in s.outbound_scanners
-    assert s.prompt_injection_block_threshold == 0.7
+    assert s.prompt_injection_block_threshold == 0.9
 
 
 def test_csv_parsed_into_list(monkeypatch):
